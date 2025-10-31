@@ -10,13 +10,6 @@ _3t4 = dh.Cdh_rot(0, 500, 0, 0, 5, 360, 0)
 step1=0
 step2=0
 
-print(_0t1.getTrans().shape)
-print(_1t2.getTrans().shape)
-print(type (_0t1.getTrans()))
-_0t4 = _0t1.getTrans() @ _1t2.getTrans()
-print("New Trans: ")
-print(type(_0t4))
-
 points = []
 while step1 < (20000/_0t1.getStepSize()): #500mm in trans
     #print("step1: " + str(step1))
@@ -28,7 +21,7 @@ while step1 < (20000/_0t1.getStepSize()): #500mm in trans
     #step2 += 5
     #_1t2.makeStep()
     #_0t4 = _0t1.getTrans() * _1t2.getTrans() #* _2t3.getTrans() * _3t4.getTrans()
-    _0t4 = np.matmul(_0t1.getTrans(), _1t2.getTrans())
+    _0t4 = _0t1.getTrans() @ _1t2.getTrans()
     print("New Trans: ")
     print(_0t4)
     testVec = np.matmul(_0t4, np.array([1, 1, 1, 1]))
@@ -40,4 +33,4 @@ pcd = o3d.geometry.PointCloud()
 pcd.points = o3d.utility.Vector3dVector(points)
 
 axes = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.3, origin=[0, 0, 0])
-o3d.visualization.draw_geometries([pcd, axes])
+o3d.visualization.draw_geometries([pcd])
