@@ -17,7 +17,11 @@ class Cdh_rot:
         self.stepSize = _stepSize
         self.max = _max
         self.min = _min
+        self.calcTrans()
+        print("Trans:")
+        print(self.tran)
 
+    def calcTrans(self):
         phi = np.radians(self.phi)
         alpha = np.radians(self.alpha)
         self.tran = np.array([
@@ -26,24 +30,18 @@ class Cdh_rot:
             [0,            np.sin(alpha),              np.cos(alpha),              self.d],
             [0,            0,                          0,                          1]
         ])
-        print("Trans:")
-        print(self.tran)
 
     def makeStep(self):
         self.phi = self.phi + 1 *self.stepSize
         if self.phi < self.max:
-            phi = np.radians(self.phi)
-            alpha = np.radians(self.alpha)
-            self.tran = np.array([
-                [np.cos(phi), -np.sin(phi)*np.cos(alpha),  np.sin(phi)*np.sin(alpha), self.a*np.cos(phi)],
-                [np.sin(phi),  np.cos(phi)*np.cos(alpha), -np.cos(phi)*np.sin(alpha), self.a*np.sin(phi)],
-                [0,            np.sin(alpha),              np.cos(alpha),              self.d],
-                [0,            0,                          0,                          1]
-            ])
+            self.calcTrans()
     def getTrans(self):
         return self.tran
     def getStepSize(self):
         return self.stepSize
+    def setZero(self):
+        self.phi = self.min
+        self.calcTrans()
 
 class Cdh_trans:
     phi = 0
@@ -63,6 +61,12 @@ class Cdh_trans:
         self.stepSize = _stepSize
         self.max = _max
         self.min = _min
+
+        self.calcTrans()
+        print("Trans:")
+        print(self.tran)
+
+    def calcTrans(self):
         phi = np.radians(self.phi)
         alpha = np.radians(self.alpha)
         self.tran = np.array([
@@ -71,22 +75,15 @@ class Cdh_trans:
             [0,            np.sin(alpha),              np.cos(alpha),              self.d],
             [0,            0,                          0,                          1]
         ])
-        print("Trans:")
-        print(self.tran)
 
     def makeStep(self):
         self.d = self.d + 1 *self.stepSize
         if self.d < self.max:
-            phi = np.radians(self.phi)
-            alpha = np.radians(self.alpha)
-            self.tran = np.array([
-                [np.cos(phi), -np.sin(phi)*np.cos(alpha),  np.sin(phi)*np.sin(alpha), self.a*np.cos(phi)],
-                [np.sin(phi),  np.cos(phi)*np.cos(alpha), -np.cos(phi)*np.sin(alpha), self.a*np.sin(phi)],
-                [0,            np.sin(alpha),              np.cos(alpha),              self.d],
-                [0,            0,                          0,                          1]
-            ])
-            #print(self.tran)
+            self.calcTrans()
     def getTrans(self):
         return self.tran
     def getStepSize(self):
         return self.stepSize
+    def setZero(self):
+        self.d = self.min
+        self.calcTrans()
