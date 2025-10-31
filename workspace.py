@@ -1,78 +1,43 @@
 import numpy as np
+import open3d as o3d
+import classesDH as dh
+      
+_0t1 = dh.Cdh_trans(90, -90, 200, 0, 20, 20000, 0)
+_1t2 = dh.Cdh_rot(0, 2000, 0, 0, 5, 360, 0)
+_2t3 = dh.Cdh_rot(0, 1000, 0, 0, 5, 360, 0)
+_3t4 = dh.Cdh_rot(0, 500, 0, 0, 5, 360, 0)
 
-class Cdh_rot:
-    phi = 0
-    alpha = 0
-    a = 0
-    d = 0
-    stepSize = 1
-    tran = np.array([])
+step1=0
+step2=0
 
-    def __init__(self, _alpha, _a, _d, _initAngle, _stepSize):
-        self.alpha = _alpha
-        self.a = _a
-        self.d = _d
-        self.phi = _initAngle
-        self.stepSize = _stepSize
+print(_0t1.getTrans().shape)
+print(_1t2.getTrans().shape)
+print(type (_0t1.getTrans()))
+_0t4 = _0t1.getTrans() @ _1t2.getTrans()
+print("New Trans: ")
+print(type(_0t4))
 
-        line1 = np.array([np.cos(np.radians(self.phi)), -np.sin(np.radians(self.phi))*np.cos(np.radians(self.alpha)), np.sin(np.radians(self.phi))*np.sin(np.radians(self.alpha)), self.a*np.cos(np.radians(self.phi))])
-        line2 = np.array([np.sin(np.radians(self.phi)), np.cos(np.radians(self.phi)*np.cos(np.radians(self.alpha))), -np.cos(np.radians(self.phi))*np.sin(np.radians(self.alpha)),self.a*np.sin(np.radians(self.phi))])
-        line3 = np.array([0, np.sin(np.radians(self.alpha)), np.cos(np.radians(self.alpha)), self.d])
-        line4 = np.array([0,0,0,1])
-        self.tran = np.array([line1, line2, line3, line4])
-        print("Trans in Radians:")
-        print(self.tran)
+points = []
+while step1 < (20000/_0t1.getStepSize()): #500mm in trans
+    #print("step1: " + str(step1))
+    step1 += _0t1.getStepSize()
+    _0t1.makeStep()
+    #step2 = 0
+    #while step2 < (360/5):
+        #print("step2: " + str(step2))
+    #step2 += 5
+    #_1t2.makeStep()
+    #_0t4 = _0t1.getTrans() * _1t2.getTrans() #* _2t3.getTrans() * _3t4.getTrans()
+    _0t4 = np.matmul(_0t1.getTrans(), _1t2.getTrans())
+    print("New Trans: ")
+    print(_0t4)
+    testVec = np.matmul(_0t4, np.array([1, 1, 1, 1]))
+    print(testVec[:3])
+    points.append(testVec[:3])
 
-    def makeStep(self):
-        self.phi = self.phi + 1 *self.stepSize
-        line1 = np.array([np.cos(np.radians(self.phi)), -np.sin(np.radians(self.phi))*np.cos(np.radians(self.alpha)), np.sin(np.radians(self.phi))*np.sin(np.radians(self.alpha)), self.a*np.cos(np.radians(self.phi))])
-        line2 = np.array([np.sin(np.radians(self.phi)), np.cos(np.radians(self.phi)*np.cos(np.radians(self.alpha))), -np.cos(np.radians(self.phi))*np.sin(np.radians(self.alpha)),self.a*np.sin(np.radians(self.phi))])
-        line3 = np.array([0, np.sin(np.radians(self.alpha)), np.cos(np.radians(self.alpha)), self.d])
-        line4 = np.array([0,0,0,1])
-        self.tran = np.array([line1, line2, line3, line4])
-    def getTrans(self):
-        return self.tran
+#print(points)
+pcd = o3d.geometry.PointCloud()
+pcd.points = o3d.utility.Vector3dVector(points)
 
-class Cdh_trans:
-    phi = 0
-    alpha = 0
-    a = 0
-    d = 0
-    stepSize = 1
-    tran = np.array([])
-
-    def __init__(self, _phi,_alpha, _a, _initalLength, _stepSize):
-        self.alpha = _alpha
-        self.a = _a
-        self.d = _initalLength
-        self.phi = _phi
-        self.stepSize = _stepSize
-
-        line1 = np.array([np.cos(np.radians(self.phi)), -np.sin(np.radians(self.phi))*np.cos(np.radians(self.alpha)), np.sin(np.radians(self.phi))*np.sin(np.radians(self.alpha)), self.a*np.cos(np.radians(self.phi))])
-        line2 = np.array([np.sin(np.radians(self.phi)), np.cos(np.radians(self.phi)*np.cos(np.radians(self.alpha))), -np.cos(np.radians(self.phi))*np.sin(np.radians(self.alpha)),self.a*np.sin(np.radians(self.phi))])
-        line3 = np.array([0, np.sin(np.radians(self.alpha)), np.cos(np.radians(self.alpha)), self.d])
-        line4 = np.array([0,0,0,1])
-        self.tran = np.array([line1, line2, line3, line4])
-        print("Trans in Radians:")
-        print(self.tran)
-
-    def makeStep(self):
-        self.d = self.d + 1 *self.stepSize
-        line1 = np.array([np.cos(np.radians(self.phi)), -np.sin(np.radians(self.phi))*np.cos(np.radians(self.alpha)), np.sin(np.radians(self.phi))*np.sin(np.radians(self.alpha)), self.a*np.cos(np.radians(self.phi))])
-        line2 = np.array([np.sin(np.radians(self.phi)), np.cos(np.radians(self.phi)*np.cos(np.radians(self.alpha))), -np.cos(np.radians(self.phi))*np.sin(np.radians(self.alpha)),self.a*np.sin(np.radians(self.phi))])
-        line3 = np.array([0, np.sin(np.radians(self.alpha)), np.cos(np.radians(self.alpha)), self.d])
-        line4 = np.array([0,0,0,1])
-        self.tran = np.array([line1, line2, line3, line4])
-    def getTrans(self):
-        return self.tran
-    
-_0t1 = Cdh_trans(90, -90, 200, 0, 1)
-_1t2 = Cdh_rot(0, 2000, 0, 0, 5)
-_2t3 = Cdh_rot(0, 1000, 0, 0, 5)
-_3t4 = Cdh_rot(0, 500, 0, 0, 5)
-
-_0t4 = _0t1.getTrans() * _1t2.getTrans() * _2t3.getTrans() * _3t4.getTrans()
-print (_0t4)
-
-testVec = np.matmul(_0t4, np.array([1, 1, 1, 1]))
-print(testVec[:3])
+axes = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.3, origin=[0, 0, 0])
+o3d.visualization.draw_geometries([pcd, axes])
