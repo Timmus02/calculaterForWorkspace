@@ -37,10 +37,11 @@ class Cdh_rot:
             self.calcTrans()
     def getTrans(self):
         return self.tran
-    def getStepSize(self):
-        return self.stepSize
     def setZero(self):
         self.phi = self.min
+        self.calcTrans()
+    def setAngle(self, _angle):
+        self.phi = _angle
         self.calcTrans()
 
 class Cdh_trans:
@@ -82,8 +83,9 @@ class Cdh_trans:
             self.calcTrans()
     def getTrans(self):
         return self.tran
-    def getStepSize(self):
-        return self.stepSize
     def setZero(self):
         self.d = self.min
+        self.calcTrans()
+    def setDist(self, _dist):
+        self.d = _dist
         self.calcTrans()
