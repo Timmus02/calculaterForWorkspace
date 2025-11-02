@@ -1,8 +1,19 @@
 # Needed Packages:
 Python 3.12
+
 numpy 
+
 open3D 0.19.0
+
 rich
+
+shapely
+
+matplotlib
+
+trimesh
+
+mapbox_earcut
 
 # Files
 startFile --> startes the Programm. Asks if Data should be saved and under wich name
