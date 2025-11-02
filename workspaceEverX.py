@@ -22,11 +22,9 @@ def calc(_save, _file):
         t = p.add_task("Processing...", total=_total)
         while not p.finished:
             points = []
-            step1 = 0
             _0t1.setZero()
-            while step1 < _0t1.max/_0t1.stepSize:
+            for i in range(int((abs(_0t1.min) +abs(_0t1.max))/_0t1.stepSize)):
                 _0t1.makeStep()
-                step1 += _0t1.stepSize
 
                 _1t2.setZero()
                 for i in range(int((abs(_1t2.min) +abs(_1t2.max))/_1t2.stepSize)):
@@ -49,9 +47,13 @@ def calc(_save, _file):
             writer = csv.writer(file)
             writer.writerow(["x", "y", "z"])   # Kopfzeile
             writer.writerows(points)
-            
+    
+    x_max, y_max, z_max = np.max(points, axis=0)
+    print(f"Max values → X: {x_max}, Y: {y_max}, Z: {z_max}")
+
+    lines, text = dh.drawScale(x_max, y_max, z_max)
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
 
     axes = o3d.geometry.TriangleMesh.create_coordinate_frame(size=200, origin=[0, 0, 0])
-    o3d.visualization.draw_geometries([pcd, axes])
+    o3d.visualization.draw_geometries([pcd, axes, lines, *text])
