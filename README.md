@@ -1,7 +1,8 @@
 # Needed Packages:
+
 Python 3.12
 
-numpy 
+numpy
 
 open3D 0.19.0
 
@@ -15,11 +16,22 @@ matplotlib
 
 trimesh
 
+alphashape
+
 # Files
-startFile --> startes the Programm. Asks if Data should be saved and under wich name
+
+startFile --> startes the Programm. Asks if Data should be saved and under wich name or if a file should be loaded
 
 loadFile --> loads old Data and shows them
+
+visualicationFuctions --> needed function for visu
 
 classesDH --> saved Classes for Denavit-Hartenberg parameters
 
 workspaceEveryX --> calculates for every x an Point and shows everything at the end --> here is the main configuration
+
+# Control of Visu
+P: Toggle Points visibilty
+H: Toggle Hull visibilty
+O: Toggle Origin visibilty
+T: Top Down on XY
