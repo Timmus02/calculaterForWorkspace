@@ -18,6 +18,8 @@ trimesh
 
 alphashape
 
+sympy
+
 # Files
 
 startFile --> startes the Programm. Asks if Data should be saved and under wich name or if a file should be loaded
