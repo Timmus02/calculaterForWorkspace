@@ -34,6 +34,9 @@ workspaceEveryX --> calculates for every x an Point and shows everything at the 
 
 # Control of Visu
 P: Toggle Points visibilty
+
 H: Toggle Hull visibilty
+
 O: Toggle Origin visibilty
+
 T: Top Down on XY
