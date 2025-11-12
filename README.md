@@ -32,7 +32,7 @@ classesDH --> saved Classes for Denavit-Hartenberg parameters
 
 workspaceEveryX --> calculates for every x an Point and shows everything at the end --> here is the main configuration
 
-sympyCalcTransformationMatrix --> calculates the Symbolix Matrix from 0 to End
+sympyCalcTransformationMatrix --> calculates the symbolic matrix from 0 to End
 
 # Control of Visu
 P: Toggle Points visibilty
