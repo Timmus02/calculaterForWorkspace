@@ -1,5 +1,5 @@
 from sympy import symbols, Matrix, cos, sin, pprint
-
+#Classe for DH
 class Cdh:
     phi = 0
     alpha = 0
