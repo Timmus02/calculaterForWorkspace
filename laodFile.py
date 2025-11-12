@@ -78,6 +78,7 @@ def main(_file):
     origin = o3d.geometry.TriangleMesh.create_coordinate_frame(size=100, origin=[0, 0, 0])
     vis.add_geometry(origin)
     vis.add_geometry(pcd)
+    vis.add_geometry(solar_Panel())
 
     vis.register_key_callback(ord("P"), toggle_pcd)
     vis.register_key_callback(ord("H"), toggle_poly)
