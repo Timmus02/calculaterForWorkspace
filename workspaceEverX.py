@@ -12,7 +12,7 @@ l5 = 600
 l6 = 300
 
 def calc(_file):
-    #minima maxima aus Kuka KR120R2700 ohne jeden Grund --> Ähnlicher Aufbau nur A2;A3;A5
+    #Rotation damit Koordinatensystem past da Koordinaten system im Opren3D fest ist.
     _Origin_ToSim = np.array([
                             [np.cos(np.radians(90)), -np.sin(np.radians(90)), 0, 0],
                             [np.sin(np.radians(90)), np.cos(np.radians(90)), 0, 0],
@@ -20,13 +20,15 @@ def calc(_file):
                             [0, 0, 0, 1]
                               ])
     print(_Origin_ToSim)
-    #                _phi,  _alpha,_  a,    _initalLength,  _stepSize,   _max,    _min
-    _0t1 = dh.Cdh_trans(0,      0,    l1+l3,  0,              200,     2*1434,   0)
-    #                 _alpha,   _a,     _d, _initAngle,  _stepSize, _max,    _min
-    _1t2 = dh.Cdh_rot(0,        l4,     0,  0,              10,     -5,     -140)
-    _2t3 = dh.Cdh_rot(0,        l5,     0,  0,              10,     168,    -120)
-    _3t4 = dh.Cdh_rot(90,       0,      0,  90,             10,     125+90,    -125+90) 
-    _4t5 = dh.Cdh_rot(0,        0,        l6, 0,             0,       0,      0) #Endeffektor
+
+    #minima maxima aus Kuka KR120R2700 ohne jeden Grund --> Ähnlicher Aufbau nur A2;A3;A5
+    #                   _phi, _a,       _alpha, stepSize, _max,        _min
+    _0t1 = dh.Cdh_trans(0,    l1+l3,    0,      200,        2*1434,   0)
+    #                  _d,      _a,     _alpha,      _stepSize, _max, _min
+    _1t2 = dh.Cdh_rot(0,        l4,      0,              10,     -5,     -140)
+    _2t3 = dh.Cdh_rot(0,        l5,      0,              10,     168,    -120)
+    _3t4 = dh.Cdh_rot(0,         0,      90,             10,     125+90, -125+90) 
+    _4t5 = dh.Cdh_rot(l6,        0,      0,              0,       0,      0) #Endeffektor
 
     _total = _0t1.max/_0t1.stepSize * int((abs(_1t2.min) +abs(_1t2.max))/_1t2.stepSize) * int((abs(_2t3.min) +abs(_2t3.max))/_2t3.stepSize) * int((abs(_3t4.min) +abs(_3t4.max))/_3t4.stepSize)
     print(_total)

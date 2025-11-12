@@ -9,11 +9,11 @@ class Cdh_rot:
     min = 0
     max = 360
 
-    def __init__(self, _alpha, _a, _d, _initAngle, _stepSize, _max, _min):
+    def __init__(self,_d, _a, _alpha, _stepSize, _max, _min):
         self.alpha = _alpha
         self.a = _a
         self.d = _d
-        self.phi = _initAngle
+        self.phi = _min
         self.stepSize = _stepSize
         self.max = _max
         self.min = _min
@@ -54,10 +54,10 @@ class Cdh_trans:
     max = 0
     min = 0
 
-    def __init__(self, _phi,_alpha, _a, _initalLength, _stepSize, _max, _min):
+    def __init__(self, _phi, _a, _alpha, _stepSize, _max, _min):
         self.alpha = _alpha
         self.a = _a
-        self.d = _initalLength
+        self.d = _min
         self.phi = _phi
         self.stepSize = _stepSize
         self.max = _max
