@@ -54,7 +54,7 @@ def make_text_mesh(text, font="Arial", font_size=20.0, depth=1.0):
     return mesh3d
 
 def drawScale(_Xmax, _Ymax, _Zmax):
-    step = 0
+    step = -50
     ScalePoints = np.empty(shape=(0,3))
     ScaleLines = np.empty(shape=(0, 2))
     while step < _Xmax:
@@ -143,3 +143,24 @@ def create2DHull(points, alpha):
     )
     polline_set.colors = o3d.utility.Vector3dVector([[0, 0, 0] for _ in plines])  # red color
     return polline_set
+
+def solar_Panel():                           #X Y  Z
+    SolarWidth = 2*1434
+    SolarHight = 1762
+    SolarAngle = np.radians(15)
+    OffsetX = 500
+    #Untere Ecken
+    Solar_Points = np.empty(shape=(0 ,3))
+    Solar_lines = np.empty(shape=(0, 2))
+
+    Solar_Points = np.append(Solar_Points, [[OffsetX, 0, 0]], axis=0) #Haupt Scala #0
+    Solar_Points = np.append(Solar_Points, [[OffsetX, 0, SolarWidth]], axis=0) #1
+
+    Solar_Points = np.append(Solar_Points, [[np.sin(SolarAngle)*SolarHight+OffsetX, np.cos(SolarAngle)*SolarHight, 0]], axis=0) #2
+    Solar_Points = np.append(Solar_Points, [[np.sin(SolarAngle)*SolarHight+OffsetX, np.cos(SolarAngle)*SolarHight, SolarWidth]], axis=0) #3
+
+    Solar_lines = np.append(Solar_lines, [[0, 1]], axis=0)
+    Solar_lines = np.append(Solar_lines, [[0, 2]], axis=0)
+    Solar_lines = np.append(Solar_lines, [[3, 1]], axis=0)
+    Solar_lines = np.append(Solar_lines, [[3, 2]], axis=0)
+    return o3d.geometry.LineSet(points=o3d.utility.Vector3dVector(Solar_Points),lines=o3d.utility.Vector2iVector(Solar_lines))

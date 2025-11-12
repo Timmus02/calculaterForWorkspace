@@ -5,21 +5,28 @@ import time
 import csv
 from laodFile import main
 
-l1 = 5
-l3 = 5
-l4 = 5
-l5 = 5
-l6 = 5
+l1 = 100
+l3 = 600
+l4 = 600
+l5 = 600
+l6 = 300
 
 def calc(_file):
     #minima maxima aus Kuka KR120R2700 ohne jeden Grund --> Ähnlicher Aufbau nur A2;A3;A5
+    _Origin_ToSim = np.array([
+                            [np.cos(np.radians(90)), -np.sin(np.radians(90)), 0, 0],
+                            [np.sin(np.radians(90)), np.cos(np.radians(90)), 0, 0],
+                            [0 , 0 , 1, 0],
+                            [0, 0, 0, 1]
+                              ])
+    print(_Origin_ToSim)
     #                _phi,  _alpha,_  a,    _initalLength,  _stepSize,   _max,    _min
-    _0t1 = dh.Cdh_trans(0,      0,    l1+l3,  -20,              20,          200,   -20)
+    _0t1 = dh.Cdh_trans(0,      0,    l1+l3,  0,              200,     2*1434,   0)
     #                 _alpha,   _a,     _d, _initAngle,  _stepSize, _max,    _min
     _1t2 = dh.Cdh_rot(0,        l4,     0,  0,              10,     -5,     -140)
     _2t3 = dh.Cdh_rot(0,        l5,     0,  0,              10,     168,    -120)
     _3t4 = dh.Cdh_rot(90,       0,      0,  90,             10,     125+90,    -125+90) 
-    _4t5 = dh.Cdh_rot(0,        0,        l6, 0,              0,       0,      0) #Endeffektor
+    _4t5 = dh.Cdh_rot(0,        0,        l6, 0,             0,       0,      0) #Endeffektor
 
     _total = _0t1.max/_0t1.stepSize * int((abs(_1t2.min) +abs(_1t2.max))/_1t2.stepSize) * int((abs(_2t3.min) +abs(_2t3.max))/_2t3.stepSize) * int((abs(_3t4.min) +abs(_3t4.max))/_3t4.stepSize)
     print(_total)
@@ -45,7 +52,7 @@ def calc(_file):
                         _3t4.setZero()
                         for i in range(int((abs(_3t4.min) +abs(_3t4.max))/_3t4.stepSize)):
                             _3t4.makeStep()
-                            _0t4 = _0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
+                            _0t4 =_Origin_ToSim @ _0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
                             #print(_0t4)
                             testVec = np.matmul(_0t4, np.array([0, 0, 0, 1]))
                             #print(testVec[:3])

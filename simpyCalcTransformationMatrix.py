@@ -27,12 +27,13 @@ class Cdh:
     def getTrans(self):
         return self.tran
    
-l1 = 5
 l2 = "l2"
-l3 = 15
-l4 = 4
-l5 = 2
-l6 = 8
+
+l1 = 100
+l3 = 600
+l4 = 600
+l5 = 600
+l6 = 300
 
 _0T1 = Cdh(0, l2, l1+l3, 0)
 _1T2 = Cdh("-q1", 0, l4, 0)
