@@ -163,4 +163,7 @@ def solar_Panel():                           #X Y  Z
     Solar_lines = np.append(Solar_lines, [[0, 2]], axis=0)
     Solar_lines = np.append(Solar_lines, [[3, 1]], axis=0)
     Solar_lines = np.append(Solar_lines, [[3, 2]], axis=0)
-    return o3d.geometry.LineSet(points=o3d.utility.Vector3dVector(Solar_Points),lines=o3d.utility.Vector2iVector(Solar_lines))
+
+    obj =  o3d.geometry.LineSet(points=o3d.utility.Vector3dVector(Solar_Points),lines=o3d.utility.Vector2iVector(Solar_lines))
+    obj = o3d.utility.Vector3dVector([[0, 0, 1] for _ in Solar_lines])
+    return obj
