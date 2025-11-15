@@ -42,3 +42,5 @@ H: Toggle Hull visibilty
 O: Toggle Origin visibilty
 
 T: Top Down on XY
+
+S: Size of Points

@@ -3,7 +3,7 @@ import open3d as o3d
 from visualicationFuctions import *
 
 
-state = {"pcd_visible": True, "poly_visible": True, "Origin_visible": True}
+state = {"pcd_visible": True, "poly_visible": True, "Origin_visible": True, "PointSize": False}
 
 def toggle_pcd(vis ):
     if state["pcd_visible"]:
@@ -36,6 +36,15 @@ def view_top_down(vis):
     ctr.set_up([0, 1, 0])       # Y is up
     ctr.set_lookat([0, 0, 0])   # Center point
     vis.update_renderer()
+    return False
+
+def PointSize(vis):
+    render_option = vis.get_render_option()
+    if state["PointSize"]:
+        render_option.point_size = 0.5
+    else:
+        render_option.point_size = 2.0
+    state["PointSize"] = not state["PointSize"]
     return False
 
 def main(_file):
@@ -75,20 +84,27 @@ def main(_file):
 
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(punkte)
+    colors = np.tile(np.array([[0.0, 0.0, 1.0]]), (punkte.shape[0], 1))
+    pcd.colors = o3d.utility.Vector3dVector(colors)
     origin = o3d.geometry.TriangleMesh.create_coordinate_frame(size=100, origin=[0, 0, 0])
     vis.add_geometry(origin)
     vis.add_geometry(pcd)
     vis.add_geometry(solar_Panel())
 
+    render_option = vis.get_render_option()
+    render_option.point_size = 2.0
+
     vis.register_key_callback(ord("P"), toggle_pcd)
     vis.register_key_callback(ord("H"), toggle_poly)
     vis.register_key_callback(ord("O"), toggle_Origin)
     vis.register_key_callback(ord("T"), view_top_down)
+    vis.register_key_callback(ord("S"), PointSize)
 
     print("P: Toggle Points visibilty")
     print("H: Toggle Hull visibilty")
     print("O: Toggle Origin visibilty")
     print("T: Top Down on XY")
+    print("S: Size of Points")
     print("If the Hull is looking bad change alpha on line 70 in loadFile.py")
 
     vis.run()
