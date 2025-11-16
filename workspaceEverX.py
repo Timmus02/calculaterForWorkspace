@@ -30,39 +30,64 @@ def calc(_file):
     _3t4 = dh.Cdh_rot(0,         0,      90,             10,     125+90, -125+90) 
     _4t5 = dh.Cdh_rot(l6,        0,      0,              0,       0,      0) #Endeffektor
 
-    _total = _0t1.max/_0t1.stepSize * int((abs(_1t2.min) +abs(_1t2.max))/_1t2.stepSize) * int((abs(_2t3.min) +abs(_2t3.max))/_2t3.stepSize) * int((abs(_3t4.min) +abs(_3t4.max))/_3t4.stepSize)
+    _total = abs((_0t1.max-_0t1.min)/_0t1.stepSize)* abs((_1t2.max -_1t2.min)/_1t2.stepSize) * abs((_2t3.max -_2t3.min)/_2t3.stepSize) * abs((_3t4.max -_3t4.min)/_3t4.stepSize)
+    _total += abs((_1t2.max -_1t2.min)/_1t2.stepSize) * abs((_2t3.max -_2t3.min)/_2t3.stepSize) * abs((_3t4.max -_3t4.min)/_3t4.stepSize)
     print(_total)
     _0t4 = _0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
     print(_0t4)
+    count = 0
     time.sleep(1)
     with Progress() as p: #Progressbar
         t = p.add_task("Processing...", total=_total)
+        finished1 = False
+        points = []
         while not p.finished:
-            points = []
-            _0t1.setZero()
-            for i in range(int((abs(_0t1.min) +abs(_0t1.max))/_0t1.stepSize)):
-                _0t1.makeStep()
-
-                _1t2.setZero()
-                for i in range(int((abs(_1t2.min) +abs(_1t2.max))/_1t2.stepSize)):
-                    _1t2.makeStep()
-
-                    _2t3.setZero()
-                    for i in range(int((abs(_2t3.min) +abs(_2t3.max))/_2t3.stepSize)):
-                        _2t3.makeStep()
-
-                        _3t4.setZero()
-                        for i in range(int((abs(_3t4.min) +abs(_3t4.max))/_3t4.stepSize)):
-                            _3t4.makeStep()
-                            _0t4 =_Origin_ToSim @ _0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
-                            #print(_0t4)
-                            testVec = np.matmul(_0t4, np.array([0, 0, 0, 1]))
-                            #print(testVec[:3])
-                            points.append(testVec[:3])
-                            p.update(t, advance=1)
+            
+            if finished1 == False:
+                _0t1.setZero()
+                for i in range(int((_0t1.max -_0t1.min)/_0t1.stepSize)+_0t1.stepSize):
+                    _1t2.setZero()
+                    for i in range(int((_1t2.max -_1t2.min)/_1t2.stepSize)):
+                        _2t3.setZero()
+                        for i in range(int((_2t3.max -_2t3.min)/_2t3.stepSize)):
+                            _3t4.setZero()
+                            for i in range(int((_3t4.max -_3t4.min)/_3t4.stepSize)):
+                                _0t4 =_Origin_ToSim @ _0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
+                                #print(_0t4)
+                                testVec = np.matmul(_0t4, np.array([0, 0, 0, 1]))
+                                #print(testVec[:3])
+                                points.append(testVec[:3])
+                                p.update(t, advance=1)
+                                count += 1
+                                _3t4.makeStep()
+                            _2t3.makeStep()
+                        _1t2.makeStep()
+                    _0t1.makeStep()
+                finished1 = True
+            #max Points
+            _0t1.setDist(_0t1.max)
+            _1t2.setZero()
+            for i in range(int((_1t2.max -_1t2.min)/_1t2.stepSize)):
+                _2t3.setZero()
+                for i in range(int((_2t3.max -_2t3.min)/_2t3.stepSize)):
+                    _3t4.setZero()
+                    for i in range(int((_3t4.max -_3t4.min)/_3t4.stepSize)):
+                        _0t4 =_Origin_ToSim @ _0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
+                        #print(_0t4)
+                        testVec = np.matmul(_0t4, np.array([0, 0, 0, 1]))
+                        #print(testVec[:3])
+                        points.append(testVec[:3])
+                        p.update(t, advance=1)
+                        count += 1
+                        _3t4.makeStep()
+                    _2t3.makeStep()
+                _1t2.makeStep()
+            p.stop()
+    print(count)
     print("Started Saving: ", end="")
     
     with open(_file + ".csv", mode="w", newline="") as file:
+        print(".")
         writer = csv.writer(file)
         writer.writerow(["x", "y", "z"])   # Kopfzeile
         writer.writerows(points)

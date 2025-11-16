@@ -3,7 +3,7 @@ import open3d as o3d
 from visualicationFuctions import *
 
 
-state = {"pcd_visible": True, "poly_visible": True, "Origin_visible": True, "PointSize": False}
+state = {"pcd_visible": True, "poly_visible": True, "Origin_visible": True, "PointSize": True}
 
 def toggle_pcd(vis ):
     if state["pcd_visible"]:
