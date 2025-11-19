@@ -76,7 +76,6 @@ class Cdh_trans:
             [0,            np.sin(alpha),              np.cos(alpha),              self.d],
             [0,            0,                          0,                          1]
         ])
-
     def makeStep(self):
         self.d = self.d + 1 *self.stepSize
         if self.d < self.max:

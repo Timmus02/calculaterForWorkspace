@@ -1,4 +1,6 @@
 from sympy import symbols, Matrix, cos, sin, pprint
+import classesDH as dh
+import numpy as np
 #Classe for DH
 class Cdh:
     phi = 0
@@ -65,4 +67,31 @@ with open("_0T5.txt", "w") as dill_file:
         formatted = [str(item) for item in row]
         dill_file.write(str(" | ".join(formatted)))
         dill_file.write("\n")
-    
+###############Überprüfung der Nulllage###########################
+
+#l2 = 0
+#_0T1 = Cdh(0, l2, l1+l3, 0)
+#_1T2 = Cdh(0, 0, l4, 0)
+#_2T3 = Cdh(0, 0, l5, 0)
+#_3T4 = Cdh(-90, 0, 0, 90)
+#_4T5 = Cdh(0, l6, 0, 0)
+#_0T5 = _0T1.getTrans() * _1T2.getTrans() * _2T3.getTrans() * _3T4.getTrans() * _4T5.getTrans()
+#pprint(_0T5)
+
+l1 = 100
+l3 = 600
+l4 = 600
+l5 = 600
+l6 = 300
+_0t1 = dh.Cdh_trans(0,    l1+l3,    0,              200,     1,   0)
+_1t2 = dh.Cdh_rot(0,        l4,      0,              10,     1,   0)
+_2t3 = dh.Cdh_rot(0,        l5,      0,              10,     1,   0)
+_3t4 = dh.Cdh_rot(0,         0,      90,             10,     1,   910) 
+_4t5 = dh.Cdh_rot(l6,        0,      0,              0,      1,   0) #Endeffektor
+_0t1.setZero()
+_1t2.setZero()
+_2t3.setZero()
+_3t4.setZero()
+_4t5.setZero()
+_0t5 =_0t1.getTrans() @ _1t2.getTrans() @ _2t3.getTrans() @ _3t4.getTrans() @ _4t5.getTrans()
+print(_0t5.round(2))
