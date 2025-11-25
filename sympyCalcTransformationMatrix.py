@@ -42,6 +42,7 @@ _1T2 = Cdh("-q1", 0, l4, 0)
 _2T3 = Cdh("-q2", 0, l5, 0)
 _3T4 = Cdh("-q3+90", 0, 0, 90)
 _4T5 = Cdh("q4", l6, 0, 0)
+_0T2 = _0T1.getTrans() * _1T2.getTrans()
 _0T5 = _0T1.getTrans() * _1T2.getTrans() * _2T3.getTrans() * _3T4.getTrans() * _4T5.getTrans()
 
 print("######0T1#########")
@@ -67,6 +68,32 @@ with open("_0T5.txt", "w") as dill_file:
         formatted = [str(item) for item in row]
         dill_file.write(str(" | ".join(formatted)))
         dill_file.write("\n")
+
+JakobiTrans = Matrix([ [0 , 0 , 0, 0, 0],
+                      [0 , 0 , 0, 0, 0],
+                      [0 , 0 , 0, 0, 0]])
+JakobiRot = Matrix([ [0 , 0 , 0, 0, 0],
+                    [0 , 0 , 0, 0, 0],
+                    [0 , 0 , 0, 0, 0]])
+##calc 0rE
+
+TCPVec = Matrix([0, 0, 0, 1])
+_0rE = _0T5 * TCPVec
+
+###########Achse2########################
+_0r2 = _0T2.col(3) #4 Spalte
+pprint(_0r2)
+#_0r0 = Matrix([0], [0], [0], [1])
+_0e2 = _0T1.getTrans().col(2) #3 Spalte
+_0e2 = _0e2.row_del(3)
+print(type(_0e2))
+trans2 = _0e2.cross(_0rE.row_del(3) - _0r2.row_del(3)) #geht nur mit 3 Zeilen nicht 4
+trans2 = trans2.col_join(Matrix([1]))
+pprint(trans2)
+
+Jakobi = Matrix([ JakobiTrans,
+                  JakobiRot])
+pprint(Jakobi)
 ###############Überprüfung der Nulllage###########################
 
 #l2 = 0
